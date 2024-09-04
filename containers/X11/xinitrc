@@ -1,14 +1,47 @@
 #!/bin/bash
+
+# Function to log messages with timestamps
+log() {
+    echo "[$(date +'%Y-%m-%dT%H:%M:%S%z')] $@"
+}
+
+log "Starting X11 session"
+
+# Trap signals (SIGTERM, SIGINT) for graceful shutdown
+trap 'log "Received SIGTERM, shutting down"; cleanup' SIGTERM
+trap 'log "Received SIGINT, shutting down"; cleanup' SIGINT
+
+# Cleanup function to stop processes
+cleanup() {
+    log "Cleaning up and stopping processes"
+
+    # Stop icewm-session-lite gracefully
+    pkill -SIGTERM icewm-session-lite
+
+    # Wait for icewm-session-lite to shut down
+    sleep 5
+
+    # If icewm-session-lite is still running, force kill it
+    if pgrep icewm-session-lite > /dev/null; then
+        log "icewm-session-lite did not stop, forcing shutdown"
+        pkill -SIGKILL icewm-session-lite
+    fi
+
+    log "Cleanup complete, exiting"
+    exit 0
+}
+
 # Set X server settings
 xset -dpms
 xset s off
 xset s noblank
 
 # Set up Xauthority
-log "Setting up Xauthority"
 [ ! -d "/home/user/xauthority" ] && mkdir -p "/home/user/xauthority"
 touch /home/user/xauthority/.xauth
 xauth -i -f /home/user/xauthority/.xauth generate :0 . trusted
 chown -R user:users /home/user/xauthority
 
+# Start icewm-session-lite in the foreground
+log "Starting icewm-session-lite"
 exec icewm-session-lite
