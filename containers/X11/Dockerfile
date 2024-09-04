@@ -2,8 +2,7 @@
 
 FROM opensuse/leap:latest
 
-RUN zypper in -y --no-recommends hostname which xinit xhost xorg-x11 xorg-x11-server xrandr xsession icewm-lite xf86-input-evdev xf86-input-keyboard xf86-input-mouse xf86-input-synaptics xf86-input-vmmouse xf86-input-void xf86-input-libinput xkeyboard-config xinput xf86-video-intel; zypper clean -a
-
+RUN zypper in -y --no-recommends hostname which xorg-x11-fonts-core xorg-x11-fonts-legacy xinit xhost xorg-x11 xorg-x11-server xrandr xsession icewm-lite xf86-input-evdev xf86-input-keyboard xf86-input-mouse xf86-input-synaptics xf86-input-vmmouse xf86-input-void xf86-input-libinput xkeyboard-config xinput xf86-video-intel; zypper clean -a
 
 RUN useradd -m user -u 1000
 COPY preferences /etc/icewm/preferences
