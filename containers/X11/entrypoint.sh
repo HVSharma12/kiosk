@@ -20,6 +20,12 @@ DISPLAY_NUM=$(echo $DISPLAY | sed 's/^://')
 log "Cleaning up existing X server lock files for display $DISPLAY"
 rm -f /tmp/.X${DISPLAY_NUM}-lock /tmp/.X11-unix/X${DISPLAY_NUM}
 
+# Create .xauth file before invoking startx
+[ ! -d "/home/user/xauthority" ] && mkdir -p "/home/user/xauthority"
+touch /home/user/xauthority/.xauth
+chown -R user:users /home/user/xauthority
+xauth -i -f /home/user/xauthority/.xauth generate :0 . trusted
+
 if [ $# -gt 0 ]; then
     log "Executing custom command: $@"
     exec "$@"
