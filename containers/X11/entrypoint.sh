@@ -30,5 +30,5 @@ if [ $# -gt 0 ]; then
     exec "$@"
 else
     log "Starting X server on display $DISPLAY"
-    exec startx -- "$DISPLAY"
+    su - user -c "startx -- $DISPLAY"
 fi
