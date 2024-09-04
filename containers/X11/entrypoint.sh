@@ -7,12 +7,6 @@ log() {
 
 log "Starting X11 entrypoint script"
 
-# Trap SIGTERM and SIGINT signals for debugging
-trap 'log "Received SIGTERM, starting cleanup"; exit 0' SIGTERM
-trap 'log "Received SIGINT, starting cleanup"; exit 0' SIGINT
-trap 'log "Received SIGUSR1, custom test signal received"; exit 0' SIGUSR1
-
-
 # Check if the DISPLAY environment variable is set
 if [ -z "$DISPLAY" ]; then
     log "DISPLAY variable is not set, defaulting to :0"
@@ -25,11 +19,6 @@ DISPLAY_NUM=$(echo $DISPLAY | sed 's/^://')
 # Clean up the specific X server lock files and sockets
 log "Cleaning up existing X server lock files for display $DISPLAY"
 rm -f /tmp/.X${DISPLAY_NUM}-lock /tmp/.X11-unix/X${DISPLAY_NUM}
-
-# Set X server settings
-xset -dpms
-xset s off
-xset s noblank
 
 # Set up Xauthority
 log "Setting up Xauthority"
@@ -45,6 +34,11 @@ else
     log "Starting X server on display $DISPLAY"
     exec startx -- "$DISPLAY" -keeptty
 fi
+
+# Set X server settings
+xset -dpms
+xset s off
+xset s noblank
 
 # Log before starting icewm-session-lite
 log "Starting icewm-session-lite"
