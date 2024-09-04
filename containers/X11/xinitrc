@@ -3,7 +3,7 @@ xset -dpms
 xset s off
 xset s noblank
 
-xauth generate :0 . trusted
+xauth -i -f /home/user/xauthority/.xauth generate :0 . trusted
 chown user:users /home/user/xauthority/.xauth
 
 exec icewm-session-lite
