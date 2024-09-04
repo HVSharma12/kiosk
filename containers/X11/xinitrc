@@ -1,1 +1,7 @@
 #!/bin/bash
+# Set X server settings
+xset -dpms
+xset s off
+xset s noblank
+
+xauth -i -f /home/user/xauthority/.xauth generate :0 . trusted

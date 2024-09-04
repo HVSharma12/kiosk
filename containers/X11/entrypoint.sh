@@ -31,15 +31,8 @@ if [ $# -gt 0 ]; then
     exec "$@"
 else
     log "Starting X server on display $DISPLAY"
-    exec startx -- "$DISPLAY" -keeptty
+    exec startx -- "$DISPLAY"
 fi
-
-# Set X server settings
-xset -dpms
-xset s off
-xset s noblank
-
-xauth -i -f /home/user/xauthority/.xauth generate :0 . trusted
 
 # Log before starting icewm-session-lite
 log "Starting icewm-session-lite"
