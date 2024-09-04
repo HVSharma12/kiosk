@@ -2,7 +2,7 @@
 
 FROM opensuse/leap:15.5
 
-RUN zypper in -y firefox MozillaFirefox-branding-openSUSE dejavu-fonts libX11-xcb1 libgtk-3-0 libavcodec58_134 libpulse0; zypper clean -a
+RUN zypper in -y firefox MozillaFirefox-branding-openSUSE google-noto-cjk-fonts libX11-xcb1 libgtk-3-0 libavcodec58_134 libpulse0; zypper clean -a
 
 RUN useradd -m user -u 1000
 ENV DISPLAY=":0"
