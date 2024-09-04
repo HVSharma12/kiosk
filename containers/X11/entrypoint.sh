@@ -36,13 +36,19 @@ DISPLAY_NUM=$(echo $DISPLAY | sed 's/^://')
 log "Cleaning up existing X server lock files for display $DISPLAY"
 rm -f /tmp/.X${DISPLAY_NUM}-lock /tmp/.X11-unix/X${DISPLAY_NUM}
 
-# Start X server
-log "Starting X server on display $DISPLAY"
-startx -- "$DISPLAY" &
-X_PID=$!
+# If a custom command is passed, run it
+if [ $# -gt 0 ]; then
+    log "Executing custom command: $@"
+    exec "$@"
+else
+    # Start X server
+    log "Starting X server on display $DISPLAY"
+    startx -- "$DISPLAY" &
+    X_PID=$!
 
-# Wait for X server process (Xorg) to finish
-log "X server (startx) running with PID $X_PID"
-wait $X_PID
+    # Wait for X server process (Xorg) to finish
+    log "X server (startx) running with PID $X_PID"
+    wait $X_PID
 
-log "X server has exited"
+    log "X server has exited"
+fi
