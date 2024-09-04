@@ -22,18 +22,6 @@ cleanup() {
     # Wait for processes to shut down
     sleep 3  # Allow some time for Xorg and icewm-session-lite to exit gracefully
 
-    # Check if Xorg is still running, and force kill it if necessary
-    if pgrep Xorg > /dev/null; then
-        log "Xorg did not stop, forcing shutdown with SIGKILL"
-        pkill -SIGKILL Xorg
-    fi
-
-    # Check if icewm-session-lite is still running, and force kill it if necessary
-    if pgrep icewm-session-lite > /dev/null; then
-        log "icewm-session-lite did not stop, forcing shutdown with SIGKILL"
-        pkill -SIGKILL icewm-session-lite
-    fi
-
     log "Cleanup complete, exiting"
     exit 0
 }
