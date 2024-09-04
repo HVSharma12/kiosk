@@ -10,6 +10,8 @@ log "Starting X11 entrypoint script"
 # Trap SIGTERM and SIGINT signals for debugging
 trap 'log "Received SIGTERM, starting cleanup"; exit 0' SIGTERM
 trap 'log "Received SIGINT, starting cleanup"; exit 0' SIGINT
+trap 'log "Received SIGUSR1, custom test signal received"; exit 0' SIGUSR1
+
 
 # Check if the DISPLAY environment variable is set
 if [ -z "$DISPLAY" ]; then
@@ -29,5 +31,5 @@ if [ $# -gt 0 ]; then
     exec "$@"
 else
     log "Starting X server on display $DISPLAY"
-    exec startx -- "$DISPLAY"
+    exec startx -- "$DISPLAY" -keeptty
 fi
