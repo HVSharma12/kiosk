@@ -19,10 +19,6 @@ cleanup() {
     pkill -SIGTERM Xorg
     pkill -SIGTERM icewm-session-lite
 
-    # Force kill remaining processes if still running
-    pkill -SIGKILL Xorg
-    pkill -SIGKILL icewm-session-lite
-
     log "Cleanup complete, exiting"
     exit 0
 }
