@@ -2,7 +2,7 @@
 
 FROM opensuse/leap:latest
 
-RUN zypper in -y --no-recommends tini hostname which xinit xhost xorg-x11 xorg-x11-server xrandr xsession icewm-lite xf86-input-evdev xf86-input-keyboard xf86-input-mouse xf86-input-synaptics xf86-input-vmmouse xf86-input-void xf86-input-libinput xkeyboard-config xinput xf86-video-intel; zypper clean -a
+RUN zypper in -y --no-recommends hostname which xinit xhost xorg-x11 xorg-x11-server xrandr xsession icewm-lite xf86-input-evdev xf86-input-keyboard xf86-input-mouse xf86-input-synaptics xf86-input-vmmouse xf86-input-void xf86-input-libinput xkeyboard-config xinput xf86-video-intel; zypper clean -a
 
 RUN useradd -m user -u 1000
 COPY preferences /etc/icewm/preferences
@@ -14,6 +14,4 @@ ENV XDG_SESSION_TYPE=x11
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-ENTRYPOINT ["/usr/bin/tini", "--"]
-
-CMD ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
