@@ -7,6 +7,23 @@ log() {
 
 log "Starting X11 entrypoint script"
 
+# Function to handle cleanup on SIGTERM
+cleanup() {
+    log "Received SIGTERM, shutting down gracefully..."
+    
+    # Kill all X11 and related processes
+    killall Xorg icewm-session
+    
+    # Wait for all child processes to finish
+    wait
+
+    log "All processes terminated, exiting."
+    exit 0
+}
+
+# Trap SIGTERM and call cleanup function
+trap 'cleanup' SIGTERM
+
 # Check if the DISPLAY environment variable is set
 if [ -z "$DISPLAY" ]; then
     log "DISPLAY variable is not set, defaulting to :0"
