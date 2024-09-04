@@ -7,6 +7,10 @@ log() {
 
 log "Starting X11 entrypoint script"
 
+# Trap SIGTERM and SIGINT signals for debugging
+trap 'log "Received SIGTERM, starting cleanup"; exit 0' SIGTERM
+trap 'log "Received SIGINT, starting cleanup"; exit 0' SIGINT
+
 # Check if the DISPLAY environment variable is set
 if [ -z "$DISPLAY" ]; then
     log "DISPLAY variable is not set, defaulting to :0"
