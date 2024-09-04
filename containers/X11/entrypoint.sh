@@ -19,9 +19,6 @@ cleanup() {
     pkill -SIGTERM Xorg
     pkill -SIGTERM icewm-session-lite
 
-    # Wait for processes to shut down
-    sleep 5
-
     # Force kill remaining processes if still running
     pkill -SIGKILL Xorg
     pkill -SIGKILL icewm-session-lite
