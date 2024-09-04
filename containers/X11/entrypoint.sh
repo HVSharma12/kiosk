@@ -33,6 +33,9 @@ if [ -z "$DISPLAY" ]; then
     DISPLAY=:0
 fi
 
+# Extract display number from DISPLAY variable
+DISPLAY_NUM=$(echo $DISPLAY | sed 's/^://')
+
 # Clean up existing X server lock files and sockets
 log "Cleaning up existing X server lock files for display $DISPLAY"
 rm -f /tmp/.X${DISPLAY_NUM}-lock /tmp/.X11-unix/X${DISPLAY_NUM}
