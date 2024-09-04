@@ -24,7 +24,6 @@ rm -f /tmp/.X${DISPLAY_NUM}-lock /tmp/.X11-unix/X${DISPLAY_NUM}
 log "Setting up Xauthority"
 [ ! -d "/home/user/xauthority" ] && mkdir -p "/home/user/xauthority"
 touch /home/user/xauthority/.xauth
-xauth -i -f /home/user/xauthority/.xauth generate :0 . trusted
 chown -R user:users /home/user/xauthority
 
 if [ $# -gt 0 ]; then
@@ -39,6 +38,8 @@ fi
 xset -dpms
 xset s off
 xset s noblank
+
+xauth -i -f /home/user/xauthority/.xauth generate :0 . trusted
 
 # Log before starting icewm-session-lite
 log "Starting icewm-session-lite"
