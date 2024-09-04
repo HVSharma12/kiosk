@@ -7,6 +7,36 @@ log() {
 
 log "Starting X11 entrypoint script"
 
+# Trap signals (SIGTERM, SIGINT) for graceful shutdown
+trap 'log "Received SIGTERM, shutting down"; cleanup' SIGTERM
+trap 'log "Received SIGINT, shutting down"; cleanup' SIGINT
+
+# Cleanup function to stop all relevant processes
+cleanup() {
+    log "Cleaning up and stopping processes"
+
+    # Stop the X server and icewm-session-lite gracefully
+    pkill -SIGTERM Xorg
+    pkill -SIGTERM icewm-session-lite
+
+    # Wait for processes to shut down
+    sleep 5
+
+    # If any processes are still running, force kill them
+    if pgrep Xorg > /dev/null; then
+        log "Xorg did not stop, forcing shutdown"
+        pkill -SIGKILL Xorg
+    fi
+
+    if pgrep icewm-session-lite > /dev/null; then
+        log "icewm-session-lite did not stop, forcing shutdown"
+        pkill -SIGKILL icewm-session-lite
+    fi
+
+    log "Cleanup complete, exiting"
+    exit 0
+}
+
 # Check if the DISPLAY environment variable is set
 if [ -z "$DISPLAY" ]; then
     log "DISPLAY variable is not set, defaulting to :0"
