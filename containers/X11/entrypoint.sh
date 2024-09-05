@@ -15,12 +15,10 @@ trap 'log "Received SIGINT, initiating shutdown"; cleanup' SIGINT
 cleanup() {
     log "Cleaning up and stopping processes"
 
-    # Stop all processes related to X server and icewm-session-lite gracefully
     pkill -SIGTERM Xorg
     pkill -SIGTERM icewm-session-lite
 
-    # Wait for processes to shut down
-    sleep 3  # Allow some time for Xorg and icewm-session-lite to exit gracefully
+    sleep 3
 
     log "Cleanup complete, exiting"
     exit 0
