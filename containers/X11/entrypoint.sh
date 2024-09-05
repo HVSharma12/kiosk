@@ -41,6 +41,14 @@ if [ $# -gt 0 ]; then
     log "Executing custom command: $@"
     exec "$@"
 else
+    # Start X server
     log "Starting X server on display $DISPLAY"
-    exec startx -- "$DISPLAY"
+    startx -- "$DISPLAY" &
+    X_PID=$!
+
+    # Wait for X server process (Xorg) to finish
+    log "X server (startx) running with PID $X_PID"
+    wait $X_PID
+
+    log "X server has exited"
 fi
