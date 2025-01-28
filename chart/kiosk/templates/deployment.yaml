@@ -44,6 +44,11 @@ spec:
               subPath: .Xmodmap
               name: xmodmap
             {{- end }}
+            {{- with .Values.X11.customKeyboardLayout }}
+            - mountPath: /usr/share/X11/xkb/symbols/custom_layout
+              subPath: custom_layout
+              name: xkb-config
+              {{- end }}
         - name: pulseaudio
           image: {{ .Values.pulseaudio.image.repository }}:{{ .Values.pulseaudio.image.tag }}
           imagePullPolicy: {{ .Values.pulseaudio.image.pullPolicy }}
@@ -132,4 +137,9 @@ spec:
         - name: xmodmap
           configMap:
             name: xmodmap
+        {{- end }}
+        {{- with .Values.X11.customKeyboardLayout }}
+        - name: xkb-config
+          configMap:
+          name: xkb-config
         {{- end }}

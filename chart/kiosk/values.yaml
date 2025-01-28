@@ -8,7 +8,7 @@ X11:
     # Overrides the image tag whose default is the chart appVersion.
     tag: latest
   keyboardModMap: null
-
+  customKeyboardLayout: null #"/path/to/custom_layout"
 
 pulseaudio:
   image:
@@ -25,8 +25,7 @@ workload:
     # Overrides the image tag whose default is the chart appVersion.
     tag: latest
 
-
-vnc: 
+vnc:
   enabled: false
   image:
     repository: registry.opensuse.org/home/atgracey/wallboardos/15.6/vnc
@@ -40,7 +39,6 @@ vnc:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
 
 podLabels: {}
 podAnnotations: {}
