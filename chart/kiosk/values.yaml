@@ -3,12 +3,17 @@
 
 X11:
   image:
-    repository: registry.opensuse.org/home/atgracey/wallboardos/15.6/x11
+    repository: registry.opensuse.org/home/hsharma/branches/home/atgracey/wallboardos/15.6/x11
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: latest
   keyboardModMap: null
-  customKeyboardLayout: null #"/path/to/custom_layout"
+  customKeyboardLayout: |
+    default partial alphanumeric_keys
+    xkb_symbols "swap_a_b" {
+      key <AC01> { [ b, B ] };  // The A key now types B (lowercase and uppercase)
+      key <AB05> { [ a, A ] };  // The B key now types A (lowercase and uppercase)
+    };
 
 pulseaudio:
   image:
