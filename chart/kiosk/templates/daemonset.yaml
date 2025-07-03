@@ -56,9 +56,6 @@ spec:
             - name: custom-background
               mountPath: /usr/share/wallpapers/SLEdefault/contents/images
             {{- end }}
-            - mountPath: /usr/lib64
-              name: nvidia-lib64
-              readOnly: true
             - mountPath: /usr/local/nvidia/toolkit
               name: nvidia-toolkit
               readOnly: true
@@ -140,9 +137,6 @@ spec:
             - mountPath: /home/user/.pki
               name: nssdb
             {{- end }}
-            - mountPath: /usr/lib64
-              name: nvidia-lib64
-              readOnly: true
             - mountPath: /usr/local/nvidia/toolkit
               name: nvidia-toolkit
               readOnly: true
@@ -164,10 +158,6 @@ spec:
         - name: udev-data
           hostPath:
             path: /run/udev/data/
-            type: Directory
-        - name: nvidia-lib64
-          hostPath:
-            path: /usr/lib64
             type: Directory
         - name: nvidia-toolkit
           hostPath:
