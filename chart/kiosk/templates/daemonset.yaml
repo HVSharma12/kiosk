@@ -28,7 +28,6 @@ spec:
         - name: x11
           image: {{ .Values.X11.image.repository }}:{{ .Values.X11.image.tag }}
           imagePullPolicy: {{ .Values.X11.image.pullPolicy }}
-          restartPolicy: Always
           securityContext:
             privileged: true
             readOnlyRootFilesystem: false
@@ -74,7 +73,6 @@ spec:
         - name: pulseaudio
           image: {{ .Values.pulseaudio.image.repository }}:{{ .Values.pulseaudio.image.tag }}
           imagePullPolicy: {{ .Values.pulseaudio.image.pullPolicy }}
-          restartPolicy: Always
           securityContext:
             privileged: true
             readOnlyRootFilesystem: false
@@ -111,23 +109,51 @@ spec:
               name: nssdb
         {{- end }}
       containers:
-        # container definitions remain unchanged
-        # GPU shared libraries:
-        volumeMounts:
-          - mountPath: /usr/lib64
-            name: nvidia-lib64
-            readOnly: true
-          - mountPath: /usr/local/nvidia/toolkit
-            name: nvidia-toolkit
-            readOnly: true
-          - mountPath: /dev/nvidia0
-            name: dev-nvidia0
-          - mountPath: /dev/nvidiactl
-            name: dev-nvidiactl
-          - mountPath: /dev/nvidia-uvm
-            name: dev-nvidia-uvm
-          - mountPath: /dev/nvidia-uvm-tools
-            name: dev-nvidia-uvm-tools
+        - name: workload
+          image: "{{ .Values.workload.image.repository }}:{{ .Values.workload.image.tag }}"
+          imagePullPolicy: {{ .Values.workload.image.pullPolicy }}
+          securityContext:
+            runAsUser: 1000
+          env:
+            {{- range .Values.workload.env }}
+            - name: "{{ .name }}"
+              value: "{{ .value }}"
+            {{- end }}
+            {{- if .Values.workload.url }}
+            - name: URL
+              value: "{{ .Values.workload.url }}"
+            {{- end }}
+            - name: PULSE_SERVER
+              value: "/var/run/pulse/native"
+            - name: DISPLAY
+              value: ':0'
+            - name: XAUTHORITY
+              value: /home/user/xauthority/.xauth
+          volumeMounts:
+            - mountPath: /tmp/.X11-unix/
+              name: xsocket
+            - mountPath: /home/user/xauthority/
+              name: xauthority
+            - mountPath: /var/run/pulse/
+              name: pasocket
+            {{- if .Values.workload.nssdbSecretName }}
+            - mountPath: /home/user/.pki
+              name: nssdb
+            {{- end }}
+            - mountPath: /usr/lib64
+              name: nvidia-lib64
+              readOnly: true
+            - mountPath: /usr/local/nvidia/toolkit
+              name: nvidia-toolkit
+              readOnly: true
+            - mountPath: /dev/nvidia0
+              name: dev-nvidia0
+            - mountPath: /dev/nvidiactl
+              name: dev-nvidiactl
+            - mountPath: /dev/nvidia-uvm
+              name: dev-nvidia-uvm
+            - mountPath: /dev/nvidia-uvm-tools
+              name: dev-nvidia-uvm-tools
       volumes:
         - name: xauthority
           emptyDir: {}
