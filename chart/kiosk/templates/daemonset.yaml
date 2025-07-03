@@ -57,6 +57,21 @@ spec:
             - name: custom-background
               mountPath: /usr/share/wallpapers/SLEdefault/contents/images
             {{- end }}
+                    volumeMounts:
+          - mountPath: /usr/lib64
+            name: nvidia-lib64
+            readOnly: true
+          - mountPath: /usr/local/nvidia/toolkit
+            name: nvidia-toolkit
+            readOnly: true
+          - mountPath: /dev/nvidia0
+            name: dev-nvidia0
+          - mountPath: /dev/nvidiactl
+            name: dev-nvidiactl
+          - mountPath: /dev/nvidia-uvm
+            name: dev-nvidia-uvm
+          - mountPath: /dev/nvidia-uvm-tools
+            name: dev-nvidia-uvm-tools
         - name: pulseaudio
           image: {{ .Values.pulseaudio.image.repository }}:{{ .Values.pulseaudio.image.tag }}
           imagePullPolicy: {{ .Values.pulseaudio.image.pullPolicy }}
@@ -261,3 +276,27 @@ spec:
           configMap:
             name: {{ .Values.X11.customBackgroundConfigMap }}
         {{- end }}
+        - name: nvidia-lib64
+          hostPath:
+            path: /usr/lib64
+            type: Directory
+        - name: nvidia-toolkit
+          hostPath:
+            path: /usr/local/nvidia/toolkit
+            type: Directory
+        - name: dev-nvidia0
+          hostPath:
+            path: /dev/nvidia0
+            type: CharDevice
+        - name: dev-nvidiactl
+          hostPath:
+            path: /dev/nvidiactl
+            type: CharDevice
+        - name: dev-nvidia-uvm
+          hostPath:
+            path: /dev/nvidia-uvm
+            type: CharDevice
+        - name: dev-nvidia-uvm-tools
+          hostPath:
+            path: /dev/nvidia-uvm-tools
+            type: CharDevice
